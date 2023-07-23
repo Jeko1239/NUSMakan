@@ -8,6 +8,7 @@
 export const firebaseConfig = {
   apiKey: "AIzaSyA1OAVxEk7qjb7KC6Z1km4NXE0tIGSxrg4",
   authDomain: "nusmakan.firebaseapp.com",
+  databaseURL: "https://nusmakan-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "nusmakan",
   storageBucket: "nusmakan.appspot.com",
   messagingSenderId: "383996015190",
