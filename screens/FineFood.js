@@ -24,7 +24,7 @@ export default function FineFoodScreen({ navigation }) {
           <View style={styles.shopReviewContainer}>
             <View style={styles.shopContainer}>
               <Text style={{fontSize: 20, fontWeight: "bold"}}>{childKey}</Text>
-              <Text style={{fontSize: 15}}>{"Delivery Time: " + deliveryTime + " mins"}</Text>
+              <Text style={{fontSize: 15}}>{"Queue Time: " + deliveryTime + " mins"}</Text>
               <Text style={{fontSize: 15}}>{(Math.ceil(rate * 100))/100 + " stars"}</Text>
               <Text style={{fontSize: 15}}>{noOfRatings + " ratings"}</Text>
             </View>
