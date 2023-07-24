@@ -96,11 +96,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   header: {
-    flex: 0.1,
+    flex: 0.125,
     flexDirection: 'row',
     backgroundColor:'#007D96', 
     width: '100%',
     justifyContent:'space-between',
+    alignItems:'baseline',
   },
   searchSignOut: {
     flex: 1,
@@ -123,7 +124,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   signOutText: {
-    fontSize: 16,
+    fontSize: 15,
     lineHeight: 21,
     fontWeight: 'bold',
     letterSpacing: 0.25,
@@ -137,7 +138,7 @@ const styles = StyleSheet.create({
   },
   searchContainer: {
     height: 40,
-    width: 250,
+    width: 175,
     borderColor: 'black',
     borderRadius: 10,
     borderWidth: 1,
