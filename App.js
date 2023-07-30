@@ -23,9 +23,10 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen name="Home" component={HomeScreen}/>
         <Stack.Screen name="LogIn" component={LogInScreen} options={{ title: 'Login' }}/>
         <Stack.Screen name="Registration" component={RegistrationScreen}/>
-        <Stack.Screen name="Home" component={HomeScreen}/>
+        
         <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} options={{ title: 'Forgot Password' }}/>
         <Stack.Screen name="Frontier" component={FrontierScreen}/>
         <Stack.Screen name="FineFood" component={FineFoodScreen} options={{ title: 'Fine Food' }}/>

@@ -43,8 +43,10 @@ export default function TechnoEdgeScreen({ navigation }) {
                   } else if (newRating < 0 || newRating > 5) {
                     alert("Please put in a Number between 0 - 5")
                   } else {
-                    update(ref(db, 'Techno Edge/' + childKey), {number_of_ratings: noOfRatings + 1, rating: rate})
-                    alert("Thanks for Rating")
+                    let aveRatings = ((rate * noOfRatings) + parseInt(newRating)) / (noOfRatings + 1);
+                    update(ref(db, 'Techno Edge/' + childKey), {number_of_ratings: noOfRatings + 1, rating: aveRatings});
+                    alert("Thanks for Rating");
+                    navigation.navigate('Home');
                   }
                 }}
                 >

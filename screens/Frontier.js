@@ -7,12 +7,12 @@ import React from 'react';
 
 export default function FrontierScreen({ navigation }) {
   const [search, setSearch] = useState('');
+  let records = [];
   const auth = getAuth();
   const db = getDatabase();
   
   const renderFrontier = () => {
     const FrontierRef = ref(db, 'Frontier');
-    let records = [];
     onValue(FrontierRef, (snapshot) => {
       snapshot.forEach(childSnapshot => {
         let newRating = '';
@@ -44,10 +44,10 @@ export default function FrontierScreen({ navigation }) {
                   } else if (newRating < 0 || newRating > 5) {
                     alert("Please put in a Number between 0 - 5")
                   } else {
-                    // console.log(newRating);
-                    // let aveRatings = ((rate * noOfRatings) + newRating) / (noOfRatings + 1);
-                    update(ref(db, 'Frontier/' + childKey), {number_of_ratings: noOfRatings + 1, rating: rate})
-                    alert("Thanks for Rating")
+                    let aveRatings = ((rate * noOfRatings) + parseInt(newRating)) / (noOfRatings + 1);
+                    update(ref(db, 'Frontier/' + childKey), {number_of_ratings: noOfRatings + 1, rating: aveRatings});
+                    alert("Thanks for Rating");
+                    navigation.navigate('Home');
                   }
                 }}
                 >
