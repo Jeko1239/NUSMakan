@@ -1,5 +1,5 @@
 import { Image, StyleSheet, View, Text, Pressable, TextInput, Alert, ScrollView } from 'react-native';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { getAuth, signOut } from 'firebase/auth';
 import { ref, getDatabase, onValue, update } from 'firebase/database';
@@ -10,54 +10,58 @@ export default function TechnoEdgeScreen({ navigation }) {
   const db = getDatabase();
 
   const renderTechnoEdge = () => {
-    const TechnoEdgeRef = ref(db, 'Techno Edge');
-    let records = [];
-    onValue(TechnoEdgeRef, (snapshot) => {
-      snapshot.forEach(childSnapshot => {
-        let newRating = '';
-        const childKey = childSnapshot.key;
-        const childData = childSnapshot.val();
-        const deliveryTime = childData.delivery_time;
-        const rate = childData.rating;
-        const noOfRatings = childData.number_of_ratings;
-        records.push(
-          <View style={styles.shopReviewContainer}>
-            <View style={styles.shopContainer}>
-              <Text style={{fontSize: 20, fontWeight: "bold"}}>{childKey}</Text>
-              <Text style={{fontSize: 15}}>{"Queue Time: " + deliveryTime + " mins"}</Text>
-              <Text style={{fontSize: 15}}>{(Math.ceil(rate * 100))/100 + " stars"}</Text>
-              <Text style={{fontSize: 15}}>{noOfRatings + " ratings"}</Text>
+    const [data, setData] = useState([]);
+    useEffect (() => {
+      let records = [];
+      const TechnoEdgeRef = ref(db, 'Techno Edge');
+      onValue(TechnoEdgeRef, (snapshot) => {
+        snapshot.forEach(childSnapshot => {
+          let newRating = '';
+          const childKey = childSnapshot.key;
+          const childData = childSnapshot.val();
+          const deliveryTime = childData.delivery_time;
+          const rate = childData.rating;
+          const noOfRatings = childData.number_of_ratings;
+          records.push(
+            <View style={styles.shopReviewContainer}>
+              <View style={styles.shopContainer}>
+                <Text style={{fontSize: 20, fontWeight: "bold"}}>{childKey}</Text>
+                <Text style={{fontSize: 15}}>{"Queue Time: " + deliveryTime + " mins"}</Text>
+                <Text style={{fontSize: 15}}>{(Math.ceil(rate * 100))/100 + " stars"}</Text>
+                <Text style={{fontSize: 15}}>{noOfRatings + " ratings"}</Text>
+              </View>
+              <View style={{justifyContent: 'center', alignContent: 'center'}}>
+                <TextInput 
+                  style={styles.ratingContainer} 
+                  placeholder = 'Out of 5'
+                  onChangeText={(number) => { newRating = number }}/>
+                <Pressable
+                  style={styles.reviewButton}
+                  onPress={() => {
+                    if (newRating === "") {
+                      alert("Field is Empty")
+                    } else if (newRating % 1 != 0) {
+                      alert("Please put in a valid Number")
+                    } else if (newRating < 0 || newRating > 5) {
+                      alert("Please put in a Number between 0 - 5")
+                    } else {
+                      let aveRatings = ((rate * noOfRatings) + parseInt(newRating)) / (noOfRatings + 1);
+                      update(ref(db, 'Techno Edge/' + childKey), {number_of_ratings: noOfRatings + 1, rating: aveRatings});
+                      alert("Thanks for Rating");
+                      navigation.navigate('Home');
+                    }
+                  }}
+                  >
+                  <Text style={styles.reviewText}>Rate</Text>
+                </Pressable>
+              </View>
             </View>
-            <View style={{justifyContent: 'center', alignContent: 'center'}}>
-              <TextInput 
-                style={styles.ratingContainer} 
-                placeholder = 'Out of 5'
-                onChangeText={(number) => { newRating = number }}/>
-              <Pressable
-                style={styles.reviewButton}
-                onPress={() => {
-                  if (newRating === "") {
-                    alert("Field is Empty")
-                  } else if (newRating % 1 != 0) {
-                    alert("Please put in a valid Number")
-                  } else if (newRating < 0 || newRating > 5) {
-                    alert("Please put in a Number between 0 - 5")
-                  } else {
-                    let aveRatings = ((rate * noOfRatings) + parseInt(newRating)) / (noOfRatings + 1);
-                    update(ref(db, 'Techno Edge/' + childKey), {number_of_ratings: noOfRatings + 1, rating: aveRatings});
-                    alert("Thanks for Rating");
-                    navigation.navigate('Home');
-                  }
-                }}
-                >
-                <Text style={styles.reviewText}>Rate</Text>
-              </Pressable>
-            </View>
-          </View>
-        );
-      })
-    });
-    return records;
+          );
+        })
+        setData(records);
+      });
+    },[])
+    return data;
   }
 
   const handleSignOut = () => {
